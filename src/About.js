@@ -77,4 +77,3 @@ import Footer from "./Footer";
     </div>
   );
 }
-
