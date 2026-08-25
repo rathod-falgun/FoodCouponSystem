@@ -9,7 +9,53 @@
 
   padding: 40px;
 }
+/* Search */
 
+.orders-list-header input {
+  width: 220px;
+  font-size: 14px;
+}
+
+
+/* Order Status */
+
+.orders-box select {
+  padding: 7px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+  background: white;
+}
+
+
+/* Delete Button */
+
+.order-delete-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 13px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.order-delete-btn:hover {
+  background: #c82333;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Customer Phone */
+
+.orders-box small {
+  color: #777;
+  font-size: 12px;
+}
 
 /* =========================
    HEADER
@@ -17,19 +63,14 @@
 
 .orders-header {
   display: flex;
-
   justify-content: space-between;
-
   align-items: center;
-
   margin-bottom: 30px;
 }
 
 .orders-header h1 {
   margin: 0;
-
   font-size: 28px;
-
   color: #333;
 }
 
