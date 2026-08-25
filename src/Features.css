@@ -1,5 +1,7 @@
 .features {
-  padding: 80px 60px;
+  width: 100%;
+
+  padding: 70px 50px;
 
   background: #fff8f2;
 
@@ -7,28 +9,30 @@
 }
 
 
-.featurehanding {
+/* =========================
+   HEADING
+========================= */
+
+.featureheading {
   text-align: center;
 
-  font-size: 38px;
+  font-size: 36px;
 
   font-weight: 700;
 
   color: #333;
 
-  margin-bottom: 50px;
-
-  position: relative;
+  margin: 0 0 45px;
 }
 
-/* Small orange line under heading */
+/* Orange line */
 
-.featurehanding::after {
+.featureheading::after {
   content: "";
 
   display: block;
 
-  width: 60px;
+  width: 55px;
 
   height: 4px;
 
@@ -45,15 +49,17 @@
 ========================= */
 
 .featurecontainer {
-  max-width: 1200px;
+  max-width: 1150px;
 
-  margin: auto;
+  margin: 0 auto;
 
   display: grid;
 
   grid-template-columns: repeat(4, 1fr);
 
   gap: 25px;
+
+  justify-content: center;
 }
 
 
@@ -64,61 +70,28 @@
 .featurecard {
   background: #ffffff;
 
-  padding: 35px 22px;
+  padding: 32px 22px;
 
-  border-radius: 15px;
+  border-radius: 14px;
 
   text-align: center;
 
   border: 1px solid #f1e6df;
 
-  box-shadow: 0 5px 20px rgba(90, 55, 35, 0.06);
+  box-shadow: 0 5px 18px rgba(90, 55, 35, 0.06);
 
   transition: all 0.3s ease;
-
-  position: relative;
-
-  overflow: hidden;
 }
 
 
-/* Orange top line */
-
-.featurecard::before {
-  content: "";
-
-  position: absolute;
-
-  top: 0;
-
-  left: 0;
-
-  width: 100%;
-
-  height: 4px;
-
-  background: #f4511e;
-
-  transform: scaleX(0);
-
-  transform-origin: left;
-
-  transition: 0.3s ease;
-}
-
-
-/* Hover */
+/* Card Hover */
 
 .featurecard:hover {
   transform: translateY(-8px);
 
-  box-shadow: 0 12px 30px rgba(90, 55, 35, 0.12);
+  border-color: #ffd2bf;
 
-  border-color: #ffd6c4;
-}
-
-.featurecard:hover::before {
-  transform: scaleX(1);
+  box-shadow: 0 10px 25px rgba(90, 55, 35, 0.12);
 }
 
 
@@ -127,17 +100,11 @@
 ========================= */
 
 .icon {
-  width: 70px;
+  width: 65px;
 
-  height: 70px;
+  height: 65px;
 
-  margin: 0 auto 20px;
-
-  border-radius: 50%;
-
-  background: #fff0e8;
-
-  color: #f4511e;
+  margin: 0 auto 18px;
 
   display: flex;
 
@@ -145,40 +112,46 @@
 
   justify-content: center;
 
-  font-size: 30px;
+  border-radius: 50%;
 
-  transition: all 0.3s ease;
+  background: #fff0e8;
+
+  color: #f4511e;
+
+  font-size: 28px;
+
+  transition: 0.3s;
 }
 
 
-/* Icon hover */
+/* Icon Hover */
 
 .featurecard:hover .icon {
   background: #f4511e;
 
-  color: #ffffff;
+  color: white;
 
   transform: scale(1.08);
 }
 
 
 /* =========================
-   CARD HEADING
+   CARD TITLE
 ========================= */
 
 .featurecard h3 {
   color: #333;
 
-  font-size: 19px;
-
-  font-weight: 600;
+  font-size: 18px;
 
   margin: 0 0 12px;
+
+  font-weight: 600;
 }
 
 
 /* =========================
-   CARD DESCRIPTION
+   CARD TEXT
 ========================= */
 
 .featurecard p {
@@ -193,15 +166,13 @@
 
 
 /* =========================
-   RESPONSIVE
+   TABLET
 ========================= */
 
-/* Tablet */
-
-@media (max-width: 1000px) {
+@media (max-width: 992px) {
 
   .features {
-    padding: 70px 35px;
+    padding: 60px 35px;
   }
 
   .featurecontainer {
@@ -210,22 +181,21 @@
     gap: 20px;
   }
 
-  .featurehanding {
-    font-size: 34px;
-  }
 }
 
 
-/* Mobile */
+/* =========================
+   MOBILE
+========================= */
 
 @media (max-width: 600px) {
 
   .features {
-    padding: 60px 20px;
+    padding: 55px 20px;
   }
 
-  .featurehanding {
-    font-size: 28px;
+  .featureheading {
+    font-size: 30px;
 
     margin-bottom: 35px;
   }
@@ -233,26 +203,11 @@
   .featurecontainer {
     grid-template-columns: 1fr;
 
-    gap: 18px;
+    max-width: 400px;
   }
 
   .featurecard {
-    padding: 30px 20px;
+    padding: 28px 20px;
   }
 
-  .icon {
-    width: 60px;
-
-    height: 60px;
-
-    font-size: 26px;
-  }
-
-  .featurecard h3 {
-    font-size: 18px;
-  }
-
-  .featurecard p {
-    font-size: 13px;
-  }
 }
