@@ -1,80 +1,305 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Managefood.css";
+
+const API_URL = "http://localhost:5000/api/foods";
+const SERVER_URL = "http://localhost:5000";
 
 export default function ManageFood() {
 
-  const [foods, setFoods] = useState([
-    {
-      id: 1,
-      name: "Veg Pizza",
-      category: "Pizza",
-      price: 299
-    },
-    {
-      id: 2,
-      name: "Veg Burger",
-      category: "Burger",
-      price: 189
-    },
-    {
-      id: 3,
-      name: "White Sauce Pasta",
-      category: "Pasta",
-      price: 249
-    }
-  ]);
+  // =====================================
+  // FOOD LIST
+  // =====================================
+
+  const [foods, setFoods] = useState([]);
+
+  const [loading, setLoading] = useState(true);
+
+
+  // =====================================
+  // FORM DATA
+  // =====================================
 
   const [name, setName] = useState("");
   const [category, setCategory] = useState("Pizza");
   const [price, setPrice] = useState("");
 
-  const addFood = (e) => {
+  // Selected image file
+  const [image, setImage] = useState(null);
+
+
+  // =====================================
+  // LOAD FOODS
+  // =====================================
+
+  const loadFoods = async () => {
+
+    try {
+
+      setLoading(true);
+
+      const response = await fetch(API_URL);
+
+      if (!response.ok) {
+        throw new Error("Failed to load foods");
+      }
+
+      const data = await response.json();
+
+      setFoods(data);
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert("Unable to load foods from database");
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  };
+
+
+  // =====================================
+  // PAGE LOAD
+  // =====================================
+
+  useEffect(() => {
+
+    loadFoods();
+
+  }, []);
+
+
+  // =====================================
+  // ADD FOOD
+  // =====================================
+
+  const addFood = async (e) => {
 
     e.preventDefault();
 
-    if (name === "" || price === "") {
-      alert("Please enter Food Name and Price");
+
+    // Validation
+
+    if (
+      name.trim() === "" ||
+      price === "" ||
+      !image
+    ) {
+
+      alert(
+        "Please enter Food Name, Price and select an Image"
+      );
+
+      return;
+
+    }
+
+
+    try {
+
+      // =================================
+      // FORM DATA
+      // =================================
+
+      const formData = new FormData();
+
+      formData.append("name", name);
+
+      formData.append("category", category);
+
+      formData.append("price", price);
+
+      formData.append("image", image);
+
+
+      // =================================
+      // SEND TO BACKEND
+      // =================================
+
+      const response = await fetch(
+        API_URL,
+        {
+          method: "POST",
+          body: formData
+        }
+      );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Failed to add food"
+        );
+
+      }
+
+
+      const savedFood =
+        await response.json();
+
+
+      // =================================
+      // UPDATE FOOD LIST
+      // =================================
+
+      setFoods(
+        (previousFoods) => [
+          ...previousFoods,
+          savedFood
+        ]
+      );
+
+
+      // =================================
+      // CLEAR FORM
+      // =================================
+
+      setName("");
+
+      setCategory("Pizza");
+
+      setPrice("");
+
+      setImage(null);
+
+
+      // Clear file input
+
+      e.target.reset();
+
+
+      alert(
+        "Food Added Successfully! 🎉"
+      );
+
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert(
+        "Failed to add food"
+      );
+
+    }
+
+  };
+
+
+  // =====================================
+  // DELETE FOOD
+  // =====================================
+
+  const deleteFood = async (id) => {
+
+    const confirmDelete =
+      window.confirm(
+        "Are you sure you want to delete this food?"
+      );
+
+
+    if (!confirmDelete) {
       return;
     }
 
-    const newFood = {
-      id: foods.length + 1,
-      name: name,
-      category: category,
-      price: price
-    };
 
-    setFoods([...foods, newFood]);
+    try {
 
-    setName("");
-    setCategory("Pizza");
-    setPrice("");
+      const response = await fetch(
+        `${API_URL}/${id}`,
+        {
+          method: "DELETE"
+        }
+      );
 
-    alert("Food Added Successfully!");
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Failed to delete food"
+        );
+
+      }
+
+
+      setFoods(
+        (previousFoods) =>
+          previousFoods.filter(
+            (food) =>
+              food._id !== id
+          )
+      );
+
+
+      alert(
+        "Food Deleted Successfully!"
+      );
+
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert(
+        "Failed to delete food"
+      );
+
+    }
+
   };
 
 
-  const deleteFood = (id) => {
+  // =====================================
+  // IMAGE URL
+  // =====================================
 
-    const updatedFoods = foods.filter(
-      (food) => food.id !== id
-    );
+  const getImageUrl = (image) => {
 
-    setFoods(updatedFoods);
+    if (!image) {
+      return "";
+    }
+
+    // If image already contains full URL
+    if (image.startsWith("http")) {
+      return image;
+    }
+
+    return SERVER_URL + image;
+
   };
 
+
+  // =====================================
+  // JSX
+  // =====================================
 
   return (
+
     <div className="manage-food">
 
-      {/* Header */}
+
+      {/* =================================
+          HEADER
+      ================================== */}
 
       <div className="manage-header">
 
         <div>
-          <h1>Manage Food</h1>
-          <p>Add and manage your food items</p>
+
+          <h1>
+            Manage Food
+          </h1>
+
+          <p>
+            Add and manage your food items
+          </p>
+
         </div>
+
 
         <a href="/Admindashboard">
           Back to Dashboard
@@ -83,25 +308,39 @@ export default function ManageFood() {
       </div>
 
 
-      {/* Add Food */}
+      {/* =================================
+          ADD FOOD
+      ================================== */}
 
       <div className="food-form-box">
 
-        <h2>Add New Food</h2>
+        <h2>
+          Add New Food
+        </h2>
+
 
         <form onSubmit={addFood}>
+
+
+          {/* Food Name */}
 
           <input
             type="text"
             placeholder="Food Name"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) =>
+              setName(e.target.value)
+            }
           />
 
 
+          {/* Category */}
+
           <select
             value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(e) =>
+              setCategory(e.target.value)
+            }
           >
 
             <option value="Pizza">
@@ -116,6 +355,10 @@ export default function ManageFood() {
               Pasta
             </option>
 
+            <option value="Sandwich">
+              Sandwich
+            </option>
+
             <option value="Dessert">
               Dessert
             </option>
@@ -127,16 +370,37 @@ export default function ManageFood() {
           </select>
 
 
+          {/* Price */}
+
           <input
             type="number"
             placeholder="Price"
             value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={(e) =>
+              setPrice(e.target.value)
+            }
           />
 
 
+          {/* Image */}
+
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) =>
+              setImage(
+                e.target.files[0]
+              )
+            }
+          />
+
+
+          {/* Add Button */}
+
           <button type="submit">
+
             Add Food
+
           </button>
 
         </form>
@@ -144,62 +408,147 @@ export default function ManageFood() {
       </div>
 
 
-      {/* Food List */}
+      {/* =================================
+          FOOD LIST
+      ================================== */}
 
       <div className="food-list-box">
 
-        <h2>Food List</h2>
-
-        <table>
-
-          <thead>
-
-            <tr>
-              <th>ID</th>
-              <th>Food Name</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th>Action</th>
-            </tr>
-
-          </thead>
+        <h2>
+          Food List
+        </h2>
 
 
-          <tbody>
+        {loading ? (
 
-            {foods.map((food) => (
+          <p>
+            Loading foods...
+          </p>
 
-              <tr key={food.id}>
+        ) : foods.length === 0 ? (
 
-                <td>{food.id}</td>
+          <p>
+            No food items available.
+          </p>
 
-                <td>{food.name}</td>
+        ) : (
 
-                <td>{food.category}</td>
+          <table>
 
-                <td>₹{food.price}</td>
+            <thead>
 
-                <td>
+              <tr>
 
-                  <button
-                    className="delete-btn"
-                    onClick={() => deleteFood(food.id)}
-                  >
-                    Delete
-                  </button>
+                <th>
+                  ID
+                </th>
 
-                </td>
+                <th>
+                  Image
+                </th>
+
+                <th>
+                  Food Name
+                </th>
+
+                <th>
+                  Category
+                </th>
+
+                <th>
+                  Price
+                </th>
+
+                <th>
+                  Action
+                </th>
 
               </tr>
 
-            ))}
+            </thead>
 
-          </tbody>
 
-        </table>
+            <tbody>
+
+              {foods.map((food) => (
+
+                <tr
+                  key={food._id}
+                >
+
+                  <td>
+                    {food._id}
+                  </td>
+
+
+                  <td>
+
+                    {food.image && (
+
+                      <img
+                        src={getImageUrl(
+                          food.image
+                        )}
+                        alt={food.name}
+                        width="60"
+                        height="50"
+                        style={{
+                          objectFit: "cover",
+                          borderRadius: "8px"
+                        }}
+                      />
+
+                    )}
+
+                  </td>
+
+
+                  <td>
+                    {food.name}
+                  </td>
+
+
+                  <td>
+                    {food.category}
+                  </td>
+
+
+                  <td>
+                    ₹{food.price}
+                  </td>
+
+
+                  <td>
+
+                    <button
+                      className="delete-btn"
+                      onClick={() =>
+                        deleteFood(
+                          food._id
+                        )
+                      }
+                    >
+
+                      Delete
+
+                    </button>
+
+                  </td>
+
+                </tr>
+
+              ))}
+
+            </tbody>
+
+          </table>
+
+        )}
 
       </div>
 
     </div>
+
   );
+
 }
