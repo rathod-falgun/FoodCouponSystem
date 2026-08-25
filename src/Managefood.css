@@ -148,26 +148,47 @@ td {
   font-size: 13px;
 }
 
-/* Delete */
+
+/* Edit Button */
+
+.edit-btn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  margin-right: 8px;
+  transition: 0.3s ease;
+}
+
+.edit-btn:hover {
+  background: #218838;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Delete Button */
 
 .delete-btn {
-  background: #e74c3c;
-
+  background: #dc3545;
   color: white;
-
   border: none;
-
-  padding: 7px 12px;
-
-  border-radius: 5px;
-
+  padding: 8px 14px;
+  border-radius: 6px;
   cursor: pointer;
-
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.3s ease;
 }
 
 .delete-btn:hover {
-  background: #c0392b;
+  background: #c82333;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* Responsive */
