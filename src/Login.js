@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./Login.css";
 
 export default function Login() {
@@ -178,6 +178,13 @@ export default function Login() {
           </button>
 
         </form>
+
+        <div className="register-link">
+          Don't have an account?{" "}
+          <Link to="/Register">
+            Register
+          </Link>
+        </div>
 
       </div>
 
